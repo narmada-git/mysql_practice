@@ -1,0 +1,299 @@
+                          Creating tables
+
+
+create table employee (
+emp_id int primary key,
+first_name varchar(40),
+last_name varchar(40),
+birth_day date,
+sex varchar(1),
+salary int,
+super_id int,
+branch_id int
+);
+
+
+create table branch (
+branch_id int primary key,
+branch_name varchar(20),
+mgr_id int(20),
+mgr_start_date date,
+foreign key (mgr_id) references employee(emp_id) on delete set null
+);
+
+
+create table client(
+client_id int primary key,
+client_name varchar(40),
+branch_id int,
+foreign key (branch_id) references branch(branch_id) on delete set null
+);
+
+create table works_with (
+ emp_id int,
+ client_id int,
+ total_sales int,
+ primary key (emp_id, client_id),
+ foreign key (emp_id) references employee(emp_id) on delete cascade,
+ foreign key (client_id) references client(client_id) on delete cascade
+ );
+ 
+ create table branch_supplier (
+  branch_id int,
+  supplier_name varchar(40),
+  supply_type varchar (40),
+  primary key (branch_id, supplier_name),
+  foreign key (branch_id) references branch(branch_id) on delete  cascade
+  );
+.......................................................................................................                           alter_tables
+
+
+alter table  employee
+add foreign key(branch_id)
+references branch(branch_id)
+on delete set null;
+
+alter table employee
+add foreign key(super_id)
+references employee(emp_id)
+on delete set null;
+
+
+SET FOREIGN_KEY_CHECKS=0;
+................................................................................................................................Select statement...................................................
+
+
+select * from giraffe.employee;
+
+select * from giraffe.branch;
+
+select * from giraffe.client;
+
+select * from giraffe.works_with;
+
+select * from giraffe.branch_supplier;
+
+.............................................................................................................................Insert statement.........................................................
+
+-- employee_values
+
+insert into employee values(100, 'david', 'wallace', '1963-11-09', 'M', 25000, null, null);
+insert into employee values(101, 'jain', 'levinson', '1965-2-2', 'F', 110000, 100, 1);
+insert into employee values(102, 'michael', 'scoff', '1964-03-04', 'M', 75000, 100, 2);
+
+insert into employee values(103, 'Angela', 'Martin', '1971-06-25', 'F', 63000, 102, 1);
+insert into employee values(104, 'kelly', 'kapoor', '1980-02-05', 'F', 55000, 102, 2);
+insert into employee values(105, 'stanley', 'Hudson', '1958-02-19', 'M', 69000, 102, 2);
+insert into employee values(106, 'josh', 'porter', '1969-09-05', 'M', 72000, 100, 3);
+insert into employee values(107, 'Andy', 'Bernard', '1973-07-22', 'M', 65000, 100, 3);
+insert into employee values(108, 'jim', 'Halpert', '1978-10-01', 'M', 71000, 100, 3);
+
+-- branch_values
+
+insert into branch values(1, 'corporate', 100, '2006-9-19');
+insert into branch values(2, 'scranton', 102, '1980-02-05');
+
+-- branch_supplier
+
+insert into branch_supplier values(2, 'Hammer Mill', 'paper');
+insert into branch_supplier values(2, 'Uni-ball', 'Writing-utensiles');
+insert into branch_supplier values(3, 'Patriot Paper', 'paper');
+insert into branch_supplier values(2, 'J.T.Forms & Labels', 'Custom Forms');
+insert into branch_supplier values(3, 'Uni-ball', 'Writing-utensiles');
+insert into branch_supplier values(3, 'Hammer Mill', 'paper');
+
+-- Client values 
+
+insert into client values(400, 'Dunmore Highschool', 2);
+insert into client values(401, 'Lackawana Country', 2);
+insert into client values(402, 'FedEX', 3);
+insert into client values(403, 'John Daly Law ,LLC', 3);
+insert into client values(404, 'Scranton Whitepages', 2);
+insert into client values(405, 'Times newspaper', 3);
+insert into client values(406, 'FedEX', 2);
+
+-- works_with
+
+insert into works_with values(105, 400, 55000);
+insert into works_with values(102, 401, 267000);
+insert into works_with values(108, 402, 22500);
+insert into works_with values(107, 403, 5000);
+insert into works_with values(108, 403, 12000);
+insert into works_with values(105, 404, 33000);
+insert into works_with values(107, 405, 26000);
+insert into works_with values(102, 406, 15000);
+insert into works_with values(105, 406, 130000);
+
+update employee
+set branch_id =1
+where emp_id  = 100;
+
+update employee
+set branch_id =2
+where emp_id  = 102;
+
+update employee
+set branch_id =3
+where emp_id  = 106;
+...........................................................................................................................................Basic Queries............................................
+
+Find employes order by salary and by descending order?
+
+select * 
+from giraffe.employee
+order by salary desc;
+...................................................................................................
+
+# Find employes ordered by sex then name?
+
+select * 
+from giraffe.employee
+order by sex,first_name,last_name;
+..................................................................................................
+
+# Find first 5 employees in table?
+
+select * 
+from giraffe.employee
+limit 5;
+..............................................................................................
+
+# Find first and last name of all employess?
+
+select first_name, last_name
+from giraffe.employee;
+.............................................................................................
+
+# Find  the forename and surnames names of all employees?
+
+select first_name as forename, last_name as surname
+from giraffe.employee;
+................................................................................................
+# Find out all the different genders?
+
+select distinct sex
+from giraffe.employee;
+
+and for different branch id are 
+
+select distinct branch_id
+from giraffe.employee;
+.......................................................................................................# Find the number of employees?
+
+select count(emp_id)
+from giraffe.employee;     output: 9
+.........................................................................................................# find the number of female employees born after 1970?
+
+select count(emp_id)
+from giraffe.employee
+where sex ='F' and birth_day > 1971-01-01;
+.................................................................................................................
+# Find the average of all employee salaryes?
+
+select avg(salary)
+from giraffe.employee;
+
+all male and female salarys average
+
+select avg(salary)
+from giraffe.employee
+where sex='F';
+
+select avg(salary)
+from giraffe.employee
+where sex='M';
+.........................................................................................................# find sum of salarys of all employees>
+
+select sum(salary)
+from giraffe.employee;
+.....................................................................................................
+
+# Find out how many males and females are there?
+
+select count(sex), sex
+from giraffe.employee;
+
+
+select count(sex), sex
+from giraffe.employee
+group by sex;
+.............................................................................................................
+# Find the total sales of each salesman?
+
+select sum(total_sales),emp_id
+from giraffe.works_with
+group by emp_id;
+................................................................................................................# find any client's who are an LLC?
+
+select *
+from giraffe.client
+where client_name like '%LLC';
+..........................................................................................................
+#
+
+select *
+from giraffe.branch_supplier
+where supplier_name like '% label%';
+................................................................................................................# find any employee born in october?
+
+select *
+from giraffe.employee
+where birth_day like '____-10%';   ----> ____  ==>it displays any four characters 
+                                      and -  => it displays one character and 10 is month.
+
+   # find client who are in schools?
+   
+   select *
+from giraffe.client
+where client_name like '%schools%';
+.....................................................................................................................................................union..................................
+
+find the list of employee and branch name?
+
+select  first_name
+from giraffe.employee
+union
+select branch_name
+from giraffe.branch;
+...............................................................................................................................................Join....................
+joining two tables:
+
+select employee.emp_id, employee.first_name, branch.branch_name
+from giraffe.employee
+join branch
+on employee.emp_id = branch.mgr_id;
+
+(Left join: it means it displays all emp ids even though it has null statement)
+
+
+#  select employee.emp_id, employee.first_name, branch.branch_name
+from giraffe.employee
+left join branch
+on employee.emp_id = branch.mgr_id;
+
+
+( rightjoin:  it means it dispalys only branch name even though if we inserted. and if there is no emp id and name the branch name has shown )
+
+select employee.emp_id, employee.first_name, branch.branch_name
+from giraffe.employee
+right join branch
+on employee.emp_id = branch.mgr_id;
+...........................................................................................................................................................................................................................................................                                   ER diagrames
+
+# What is ER diagram explain?
+Image result for what is Er diagrams in sql
+An entity relationship diagram (ERD), also known as an entity relationship model, is a graphical representation that depicts relationships among people, objects, places, concepts or events within an information technology (IT) system.
+
+
+
+
+
+
+
+
+
+  
+ 
+
+
+

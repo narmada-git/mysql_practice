@@ -1,0 +1,198 @@
+# Select * FROM Customers;
+# SELECT DISTINCT Country FROM Customers;(Distinct means different)
+# SELECT * FROM Customers
+  WHERE Country='Mexico';
+# SELECT * FROM Customers
+  WHERE CustomerID=1;
+# The (ORDER BY)--> keyword is used to sort the result-set in ascending or descending order.
+# SELECT * FROM Customers
+  ORDER BY Country;       ---->ascending order
+# SELECT * FROM Customers
+  ORDER BY Country DESC; 
+# SELECT * FROM Customers
+ORDER BY Country, CustomerName;
+# SELECT * FROM Customers
+ORDER BY Country ASC, CustomerName DESC;
+................................................................................................................................................................................................................................................................................................................
+                              CREATING TABLES
+                             ................ 
+ # -- truncate student ===> it deletes all data in database.
+
+
+
+
+
+ CREATE table Student(
+Studentid INT,
+name varchar(20),
+major varchar(20),
+primary key(Studentid)
+);
+
+# describe student; ===> it describes student.
+
+# Select * from Student;===>it shows all possible elements in student.
+
+# ALTER TABLE student DROP COLUMN city;===> it deletes the city element in student.
+
+# insert into student values(3, 'shravan', 'coding');====>it inserts student id as 3 ,with name as                                            shravan,and major as coding.
+
+# insert into student( studentid, name) values(4, 'shravan');===>it inserts student id and name and
+ major as null. and if we run again student id as 3 and name as shravan like eg:insert into student values(3, 'shravan') it shows as error that duplicate key does not exist.
+
+# insert into student values(1, 'shravan','coding');
+insert into student values(2, 'narmada','maths');
+insert into student( studentid, name) values(3, 'nkp');
+insert into student values(4, 'pkr','biology');
+insert into student values(5, 'ktr','chemistry');
+
+
+#  Studentid INT auto_increment,===>it directs increments the student id values.
+
+....................................................................................................................................................................................................................... update and delete mode................................................................
+
+# SELECT * FROM giraffe.student;
+
+
+update student
+set major = 'qqqqqqqq' =====>it replaces  in place of studentid 2 the "maths" has updated to 'qqqqqq'
+where major = 'maths';
+
+# update student
+set major = 'medicine'  ==>it updates particular student id.
+where studentid=4;
+
+
+# update student
+set major = 'biochemistry'     ===> it updates for multiple values.
+where major='biology' or major ='chemistry';
+
+# update student
+set name='priya', major = 'undecided'  ===> it updates studentid 1 value as priya.
+where studentid=1;
+
+# update student         ============> it updates everything as undecided.
+set  major = 'undecided';
+
+
+# delete from student
+where  Studentid=6;     ======> it deletes the student id 6.
+
+# delete from student
+where  name='priya' And major ='undecided'; ===> it also deletes with name and major.
+
+# SELECT name        ===>  it shows all names in database.
+FROM giraffe.student;
+
+# SELECT student.name, student.major
+FROM giraffe.student  ======> it gives order i.e, alphabetical order.(des=decending order)
+order by name des;  (asc= ascending order)
+
+#  SELECT *
+FROM giraffe.student
+order by Studentid desc;
+
+# SELECT *
+FROM giraffe.student
+order by  major, Studentid desc;
+
+# SELECT *
+FROM giraffe.student  ==> it displayes only 2 student ids.
+limit 2;
+
+# SELECT *
+FROM giraffe.student        =====> it displays only mathamatics.
+where major = 'mathamatics';
+
+
+# SELECT *
+FROM giraffe.student  ===> it displays both mathamatics and biology.
+where major = 'mathamatics' or major= 'biology';
+
+
+#  SELECT *
+FROM giraffe.student        ===> it displays all student id except mathamatics.
+where major <> 'mathamatics' ;          (<>  --> it means not equal)
+
+
+# SELECT *
+FROM giraffe.student      ===> it displays output all less than 3 values.
+where Studentid < 3 ;
+
+
+#  SELECT *
+FROM giraffe.student            ======> [its shows output as less and equal to 3 and name is not 
+where Studentid <= 3 and name <> 'shravan' ;                 equal to shravan.]
+
+
+#  SELECT *
+FROM giraffe.student         ===>  it displays only these names output.
+where  name in ('shravan', 'naru', 'jack');
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- CREATING COMPANY DATABASE----------------------------------
+
+# what is foreign key?
+
+A foreign key is a column or group of columns in a relational database table that provides a link between data in two tables. 
+
+Primary Key ?
+A primary key constrain is a column or group of columns that uniquely identifies every row in the table of the relational database management system.
+
+
+create table employee (
+emp_id int primary key,
+first_name varchar(40),
+last_name varchar(40),
+birth_day date,
+sex varchar(1),
+salary int,
+super_id int,
+branch_id int
+);
+
+select * from employee;
+
+
+create table branch (
+branch_id int primary key,
+branch_name varchar(20),
+mgr_id int(20),
+mgr_start_date date,
+foreign key (mgr_id) references employee(emp_id) on delete set null
+);
+
+[when ever we are creating foreign key we have to set as (on delete set null)].
+
+
+#   create table client(
+client_id int primary key,
+client_name varchar(40),
+branch_id int,
+foreign key (branch_id) references branch(branch_id) on delete set null
+);
+
+
+#  create table works_with (
+ emp_id int,
+ client_id int,
+ total_sales int,
+ primary key (emp_id, client_id),
+ foreign key (emp_id) references employee(emp_id) on delete set null,
+ foreign key (client_id) references client(client_id) on delete set null
+ );
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
